@@ -28,10 +28,12 @@ def main():
         if not detail:
             continue
 
-        question_id = detail["question"]["questionId"]
+        question = detail["question"]
+        question_id = question["questionId"]
+        difficulty = question["difficulty"].lower()
         code = detail["code"]
 
-        filename = f"{question_id}-{title_slug}{extension}"
+        filename = f"{difficulty}_{question_id}-{title_slug}{extension}"
         file_manager.save_code(folder, filename, code)
 
         seen.add(title_slug)

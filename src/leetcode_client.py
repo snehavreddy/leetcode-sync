@@ -17,7 +17,10 @@ class LeetCodeClient:
 
         response = requests.post(
             LEETCODE_GRAPHQL_URL,
-            json={"query": query, "variables": {"username": username}},
+            json={
+                "query": query,
+                "variables": {"username": username}
+            },
             headers=HEADERS
         )
 
@@ -38,6 +41,7 @@ class LeetCodeClient:
             question {
               questionId
               titleSlug
+              difficulty
             }
           }
         }
