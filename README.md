@@ -1,118 +1,168 @@
 # 📘 LeetCode Sync Automation
 
-This project automatically fetches your recent LeetCode submissions and stores them locally, organized by language.
+Automatically sync your accepted LeetCode submissions to a separate GitHub portfolio repository.
 
-It uses your LeetCode session cookie to access submission details via GraphQL.
+This project:
+
+- Fetches recent accepted submissions using LeetCode GraphQL
+- Extracts solution code
+- Organizes files by language and difficulty
+- Prevents duplicate overwrites
+- Automatically commits & pushes to a separate solutions repository
+
+Built with clean modular architecture and automation mindset.
 
 ---
 
-# Complete Setup Guide (From Scratch)
+# Architecture Overview
 
-Follow these steps exactly.
+This setup uses **two repositories**:
+
+### 1 leetcode-sync
+Automation engine (this repository)
+
+### 2 LeetCode-Practice-Solutions
+Public portfolio repository containing only solutions
+
+This separation keeps:
+
+- Automation logic clean  
+- Portfolio repository clean 
 
 ---
 
-## 1️. Clone the Repository
+# Project Structure
 
-```bash
+```
+leetcode-sync/
+│
+├── src/
+│   ├── config.py
+│   ├── leetcode_client.py
+│   ├── file_manager.py
+│   ├── git_manager.py
+│   └── main.py
+│
+├── LeetCode-Practice-Solutions/   ← separate git repo
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+---
+
+#  Complete Setup Guide
+
+Follow these steps carefully.
+
+---
+
+## 1 Clone Automation Repository
+
+```
 git clone https://github.com/YOUR_USERNAME/leetcode-sync.git
 cd leetcode-sync
 ```
 
 ---
 
-## 2️. Create a Virtual Environment
+## 2 Clone Solutions Repository Inside It
 
-Create the virtual environment:
+```
+git clone https://github.com/YOUR_USERNAME/LeetCode-Practice-Solutions.git
+```
 
-```bash
+Your structure should now look like:
+
+```
+leetcode-sync/
+└── leetcode-solutions/
+```
+
+> Important: `LeetCode-Practice-Solutions` must already exist on GitHub.
+
+---
+
+## 3 Create Virtual Environment
+
+```
 python -m venv venv
 ```
 
-Activate it:
+Activate:
 
-### Windows (PowerShell)
-
-```bash
+### Windows
+```
 venv\Scripts\activate
 ```
 
 ### Mac / Linux
-
-```bash
+```
 source venv/bin/activate
 ```
 
-If successful, your terminal will show:
-
-```
-(venv)
-```
-
 ---
 
-## 3️. Install Required Dependencies
+## 4 Install Dependencies
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
-This installs:
-- `requests`
-- `python-dotenv`
+Dependencies:
+- requests
+- python-dotenv
 
 ---
 
-## 4️. Create a `.env` File
+## 5 Create `.env` File
 
-In the project root, create a file named:
-
-```
-.env
-```
-
-Add the following content:
+Create a `.env` file in the project root:
 
 ```
-LEETCODE_SESSION=your_session_cookie_here
-LEETCODE_CSRFTOKEN=your_csrf_token_here
+LEETCODE_SESSION=your_session_cookie
+LEETCODE_CSRFTOKEN=your_csrf_token
 LEETCODE_USERNAME=your_leetcode_username
 ```
 
 ---
 
-### How to Get LeetCode Session & CSRF Token ??
+### How To Get Session & CSRF Token
 
-1. Login to LeetCode in your browser
-2. Open Developer Tools (Press F12)
-3. Go to **Application → Cookies**
+1. Login to LeetCode
+2. Open Developer Tools (F12)
+3. Go to Application → Cookies
 4. Copy:
-   - `LEETCODE_SESSION`
-   - `csrftoken`
+   - LEETCODE_SESSION
+   - csrftoken
 
-Paste them into your `.env` file.
-
-⚠️ Never commit this file.
+⚠ Never commit this file.  
+⚠ Tokens may expire and need regeneration.
 
 ---
 
-## 5️⃣ Run the Script
+# Run the Sync
 
-```bash
+```
 python src/main.py
 ```
 
+What happens automatically:
+
+1. Fetches latest accepted submissions
+2. Saves solutions into `LeetCode-Practice-Solutions`
+3. Detects file changes
+4. Runs `git add`
+5. Runs `git commit`
+6. Runs `git push`
+
+No manual Git steps required.
+
 ---
 
-# 📂 Output
+# Output Format
 
-Solutions will be generated inside:
-
-```
-leetcode-solutions/
-```
-
-Organized like:
+Solutions are organized as:
 
 ```
 leetcode-solutions/
@@ -121,7 +171,7 @@ leetcode-solutions/
 └── sql/
 ```
 
-Each file is named:
+File naming format:
 
 ```
 <difficulty>_<questionId>-<titleSlug>.<extension>
@@ -137,52 +187,37 @@ hard_4-median-of-two-sorted-arrays.py
 
 ---
 
-# Project Structure
+# Features
 
-```
-leetcode-sync/
-│
-├── src/
-│   ├── config.py
-│   ├── leetcode_client.py
-│   ├── file_manager.py
-│   └── main.py
-│
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
+✔ GraphQL submission fetch  
+✔ Language-based organization  
+✔ Difficulty tagging  
+✔ Duplicate prevention  
+✔ Separate portfolio repository  
+✔ Automatic commit & push  
+✔ Modular and clean architecture  
 
 ---
 
 # Security Notes
 
 - `.env` is ignored via `.gitignore`
-- Do NOT share your session token
-- Tokens may expire — regenerate if needed
+- Never expose session tokens publicly
+- Regenerate tokens if expired
 
 ---
 
-# What This Tool Does ??
+# 🔮 Future Enhancements
 
-✔ Fetches recent submissions  
-✔ Extracts solution code  
-✔ Organizes by language  
-✔ Prevents duplicates  
-✔ Structured and modular architecture  
-
----
-
-# Possible Improvements
-
-- Auto Git commit & push to solutions repo
-- GitHub Actions daily automation
-- Submission metadata logging
-- Stats generation (easy/medium/hard count)
-- Overwrite detection for modified submissions
+- Smart commit messages with problem count
+- README stats auto-generation (Easy/Medium/Hard counter)
+- GitHub Actions scheduled automation
+- Submission metadata logging (runtime, memory)
+- Retry mechanism for network failures
+- Branch auto-detection
 
 ---
 
-# 📜 License
+# License
 
 This project is for educational and personal automation purposes.

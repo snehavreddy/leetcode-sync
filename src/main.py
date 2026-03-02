@@ -2,6 +2,8 @@ import time
 from config import LEETCODE_USERNAME
 from leetcode_client import LeetCodeClient
 from file_manager import FileManager
+from git_manager import git_auto_push
+from file_manager import BASE_DIR
 
 
 def main():
@@ -45,3 +47,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    git_auto_push(BASE_DIR)
